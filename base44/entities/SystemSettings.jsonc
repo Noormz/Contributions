@@ -1,0 +1,43 @@
+{
+  "name": "SystemSettings",
+  "type": "object",
+  "properties": {
+    "setting_key": {
+      "type": "string"
+    },
+    "setting_value": {
+      "type": "string"
+    },
+    "setting_group": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "description_ar": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "setting_key",
+    "setting_value"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    }
+  }
+}

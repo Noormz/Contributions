@@ -1,0 +1,131 @@
+{
+  "name": "CommunicationMessage",
+  "type": "object",
+  "properties": {
+    "thread_id": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "from_address": {
+      "type": "string"
+    },
+    "to_addresses": {
+      "type": "string"
+    },
+    "cc_addresses": {
+      "type": "string"
+    },
+    "bcc_addresses": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "outbound",
+        "inbound"
+      ],
+      "default": "outbound"
+    },
+    "message_id": {
+      "type": "string"
+    },
+    "in_reply_to": {
+      "type": "string"
+    },
+    "delivery_status": {
+      "type": "string",
+      "enum": [
+        "sent",
+        "delivered",
+        "failed",
+        "pending",
+        "received"
+      ],
+      "default": "sent"
+    },
+    "sent_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "bcc_copy_sent": {
+      "type": "boolean",
+      "default": false
+    },
+    "channel": {
+      "type": "string"
+    },
+    "sender_name": {
+      "type": "string"
+    },
+    "template_key": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "thread_id",
+    "subject"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.company_id": "{{user.data.company_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    }
+  }
+}

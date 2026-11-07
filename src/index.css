@@ -1,0 +1,209 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 20% 98%;
+    --foreground: 222 24% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 24% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 24% 14%;
+    --primary: 219 47% 26%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 219 47% 26%;
+    --muted: 210 20% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 210 100% 42%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 142 71% 40%;
+    --success-foreground: 0 0% 100%;
+    --warning: 32 95% 44%;
+    --warning-foreground: 0 0% 100%;
+    --border: 214 20% 90%;
+    --input: 214 20% 90%;
+    --ring: 210 100% 42%;
+    --chart-1: 219 47% 26%;
+    --chart-2: 210 100% 42%;
+    --chart-3: 142 71% 40%;
+    --chart-4: 32 95% 50%;
+    --chart-5: 0 84% 60%;
+    --radius: 0.5rem;
+    --font-heading: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-arabic: "Cairo", "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --sidebar-background: 219 47% 22%;
+    --sidebar-foreground: 210 30% 90%;
+    --sidebar-primary: 210 100% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 219 40% 30%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 219 40% 32%;
+    --sidebar-ring: 210 100% 55%;
+  }
+
+  .dark {
+    --background: 222 24% 10%;
+    --foreground: 210 30% 92%;
+    --card: 222 24% 13%;
+    --card-foreground: 210 30% 92%;
+    --popover: 222 24% 13%;
+    --popover-foreground: 210 30% 92%;
+    --primary: 210 100% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 222 20% 20%;
+    --secondary-foreground: 210 30% 92%;
+    --muted: 222 20% 20%;
+    --muted-foreground: 215 16% 65%;
+    --accent: 210 100% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 70% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 142 60% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 32 90% 55%;
+    --warning-foreground: 0 0% 100%;
+    --border: 222 20% 22%;
+    --input: 222 20% 22%;
+    --ring: 210 100% 55%;
+    --sidebar-background: 222 30% 9%;
+    --sidebar-foreground: 210 20% 85%;
+    --sidebar-primary: 210 100% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 24% 16%;
+    --sidebar-accent-foreground: 210 30% 92%;
+    --sidebar-border: 222 24% 18%;
+    --sidebar-ring: 210 100% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+  }
+
+  html[lang="ar"] body {
+    font-family: var(--font-arabic);
+  }
+
+  html[lang="ar"] {
+    direction: rtl;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: hsl(var(--border));
+    border-radius: 9999px;
+  }
+}
+/* ---------------------------------------------------------------------------
+   Microsoft Dynamics 365 (Fluent 2) look — <html data-look="dynamics">.
+   Segoe UI, Dynamics brand blue, navy command bar, light site map with a blue
+   selection bar, neutral #FAF9F8 workspace, 4px corners and Fluent depth.
+   --------------------------------------------------------------------------- */
+@layer base {
+  :root[data-look="dynamics"] {
+    --background: 30 9% 98%;          /* #FAF9F8 */
+    --foreground: 0 0% 14%;           /* #242424 */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 14%;
+    --primary: 208 85% 40%;           /* #0F6CBD */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 14%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 38%;     /* #616161 */
+    --accent: 208 85% 40%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 356 70% 43%;       /* #C50F1F */
+    --success: 120 60% 31%;           /* #107C10 */
+    --warning: 30 100% 37%;           /* #BC4B09 range */
+    --border: 0 0% 88%;               /* #E0E0E0 */
+    --input: 0 0% 82%;
+    --ring: 208 85% 40%;
+    --chart-1: 208 85% 40%;
+    --chart-2: 192 100% 32%;
+    --chart-3: 120 60% 31%;
+    --chart-4: 30 100% 45%;
+    --chart-5: 280 50% 45%;
+    --radius: 0.25rem;
+    --font-heading: "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+    --font-body: "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+    --font-display: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    --font-arabic: "Segoe UI", "Cairo", Tahoma, sans-serif;
+    --sidebar-background: 0 0% 94%;   /* #EFEFEF site map */
+    --sidebar-foreground: 0 0% 14%;
+    --sidebar-primary: 0 0% 100%;     /* selected item: white tile */
+    --sidebar-primary-foreground: 208 85% 32%;
+    --sidebar-accent: 0 0% 88%;
+    --sidebar-accent-foreground: 0 0% 14%;
+    --sidebar-border: 0 0% 86%;
+    --sidebar-ring: 208 85% 40%;
+  }
+}
+
+/* Body text in Fluent sizes */
+:root[data-look="dynamics"] body { font-size: 14px; letter-spacing: 0; }
+
+/* 4px corners everywhere except pills/avatars */
+:root[data-look="dynamics"] :is(.rounded, .rounded-md, .rounded-lg, .rounded-xl, .rounded-2xl, .rounded-3xl) { border-radius: 4px; }
+
+/* Fluent depth instead of soft shadows */
+:root[data-look="dynamics"] :is(.shadow-sm, .shadow) { box-shadow: 0 1.6px 3.6px rgba(0, 0, 0, 0.132), 0 0.3px 0.9px rgba(0, 0, 0, 0.108); }
+:root[data-look="dynamics"] :is(.shadow-md, .shadow-lg) { box-shadow: 0 6.4px 14.4px rgba(0, 0, 0, 0.132), 0 1.2px 3.6px rgba(0, 0, 0, 0.108); }
+
+/* Navy command bar across the top */
+:root[data-look="dynamics"] [data-shell="topbar"] {
+  background: #002050;
+  border-bottom-color: #002050;
+  color: #fff;
+  backdrop-filter: none;
+}
+:root[data-look="dynamics"] [data-shell="topbar"] :is(.text-muted-foreground, .text-foreground) { color: rgba(255, 255, 255, 0.85); }
+:root[data-look="dynamics"] [data-shell="topbar"] :is(button, a) { color: #fff; }
+:root[data-look="dynamics"] [data-shell="topbar"] button { background: transparent; border-color: rgba(255, 255, 255, 0.35); }
+:root[data-look="dynamics"] [data-shell="topbar"] button:hover { background: rgba(255, 255, 255, 0.12); }
+:root[data-look="dynamics"] [data-shell="topbar"] [data-shell="topbar-menu"] :is(button, a) { color: inherit; }
+
+/* Site map: light panel, blue bar on the selected item */
+:root[data-look="dynamics"] [data-shell="sidebar"] .text-white { color: hsl(var(--sidebar-foreground)); }
+:root[data-look="dynamics"] [data-shell="sidebar"] a[aria-current="page"] { box-shadow: inset 3px 0 0 hsl(var(--primary)); font-weight: 600; }
+:root[data-look="dynamics"][dir="rtl"] [data-shell="sidebar"] a[aria-current="page"],
+:root[data-look="dynamics"] [dir="rtl"] [data-shell="sidebar"] a[aria-current="page"] { box-shadow: inset -3px 0 0 hsl(var(--primary)); }
+:root[data-look="dynamics"] [data-shell="sidebar"] { border-inline-end: 1px solid hsl(var(--sidebar-border)); }
+
+/* Logo variant per look */
+.look-dynamics-only { display: none; }
+:root[data-look="dynamics"] .look-dynamics-only { display: block; }
+:root[data-look="dynamics"] .look-kfas-only { display: none; }
+
+/* Grids and forms: Dynamics-style headers and inputs */
+:root[data-look="dynamics"] thead th { font-weight: 600; color: hsl(var(--foreground)); }
+:root[data-look="dynamics"] :is(input, textarea, select):not([type="checkbox"]):not([type="radio"]) { border-radius: 4px; border-bottom-color: hsl(0 0% 46%); }
+:root[data-look="dynamics"] :is(input, textarea):focus-visible { border-bottom: 2px solid hsl(var(--primary)); box-shadow: none; outline: none; }
+/* Menus that open from the command bar keep normal colours */
+:root[data-look="dynamics"] [data-shell="topbar-menu"] { color: hsl(var(--foreground)); }
+:root[data-look="dynamics"] [data-shell="topbar-menu"] .text-muted-foreground { color: hsl(var(--muted-foreground)); }
+:root[data-look="dynamics"] [data-shell="topbar-menu"] .text-foreground { color: hsl(var(--foreground)); }
+:root[data-look="dynamics"] [data-shell="topbar-menu"] :is(button, a) { color: inherit; border-color: hsl(var(--border)); }
+:root[data-look="dynamics"] [data-shell="topbar-menu"] button:hover { background: hsl(var(--muted)); }
+/* Fluent type ramp: semibold titles */
+:root[data-look="dynamics"] :is(h1, h2, h3) { font-weight: 600; letter-spacing: 0; }
+:root[data-look="dynamics"] main h1 { font-size: 1.5rem; line-height: 2rem; }

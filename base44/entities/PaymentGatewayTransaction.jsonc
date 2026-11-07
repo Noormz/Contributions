@@ -1,0 +1,114 @@
+{
+  "name": "PaymentGatewayTransaction",
+  "type": "object",
+  "properties": {
+    "payment_id": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "application_id": {
+      "type": "string"
+    },
+    "gateway_reference": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string",
+      "default": "KWD"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "initiated",
+        "pending",
+        "completed",
+        "failed",
+        "cancelled",
+        "refunded"
+      ],
+      "default": "initiated"
+    },
+    "gateway_response": {
+      "type": "string"
+    },
+    "checkout_url": {
+      "type": "string"
+    },
+    "initiated_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "test_mode": {
+      "type": "boolean",
+      "default": true
+    },
+    "provider": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "company_id",
+    "amount"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.company_id": "{{user.data.company_id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "name": "PaymentAllocation",
+  "type": "object",
+  "properties": {
+    "payment_id": {
+      "type": "string"
+    },
+    "application_id": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "allocated_amount": {
+      "type": "number"
+    },
+    "allocation_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "receipt_voucher_id": {
+      "type": "string"
+    },
+    "financial_year": {
+      "type": "string"
+    },
+    "allocated_by": {
+      "type": "string"
+    },
+    "manual": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "payment_id",
+    "allocated_amount"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    }
+  }
+}

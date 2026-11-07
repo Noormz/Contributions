@@ -1,0 +1,208 @@
+{
+  "name": "Company",
+  "type": "object",
+  "properties": {
+    "company_name_en": {
+      "type": "string"
+    },
+    "company_name_ar": {
+      "type": "string"
+    },
+    "previous_company_name": {
+      "type": "string"
+    },
+    "commercial_registration_number": {
+      "type": "string"
+    },
+    "business_license_number": {
+      "type": "string"
+    },
+    "business_license_attachment": {
+      "type": "string"
+    },
+    "year_of_establishment": {
+      "type": "string"
+    },
+    "company_type": {
+      "type": "string"
+    },
+    "is_wll": {
+      "type": "boolean",
+      "default": false
+    },
+    "business_sector": {
+      "type": "string"
+    },
+    "capital": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string",
+      "default": "KWD"
+    },
+    "auditor_name": {
+      "type": "string"
+    },
+    "cofs_file_number": {
+      "type": "string"
+    },
+    "moci_registration_proof": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string",
+      "default": "Kuwait"
+    },
+    "governorate": {
+      "type": "string"
+    },
+    "area": {
+      "type": "string"
+    },
+    "street": {
+      "type": "string"
+    },
+    "building": {
+      "type": "string"
+    },
+    "floor": {
+      "type": "string"
+    },
+    "office": {
+      "type": "string"
+    },
+    "postal_address": {
+      "type": "string"
+    },
+    "postal_code": {
+      "type": "string"
+    },
+    "telephone": {
+      "type": "string"
+    },
+    "official_email": {
+      "type": "string"
+    },
+    "ceo_name_en": {
+      "type": "string"
+    },
+    "ceo_name_ar": {
+      "type": "string"
+    },
+    "ceo_job_title": {
+      "type": "string"
+    },
+    "ceo_email": {
+      "type": "string"
+    },
+    "ceo_telephone": {
+      "type": "string"
+    },
+    "ceo_mobile": {
+      "type": "string"
+    },
+    "financial_manager_name": {
+      "type": "string"
+    },
+    "financial_manager_position": {
+      "type": "string"
+    },
+    "financial_manager_email": {
+      "type": "string"
+    },
+    "financial_manager_telephone": {
+      "type": "string"
+    },
+    "financial_manager_mobile": {
+      "type": "string"
+    },
+    "primary_user_id": {
+      "type": "string"
+    },
+    "authorized_users": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "suspended",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "profile_locked": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "company_name_en",
+    "commercial_registration_number"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.primary_user_id": "{{user.id}}"
+        },
+        {
+          "data.authorized_users": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.primary_user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    }
+  }
+}

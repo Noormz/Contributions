@@ -1,0 +1,49 @@
+{
+  "name": "FaqEntry",
+  "type": "object",
+  "properties": {
+    "question_en": {
+      "type": "string"
+    },
+    "question_ar": {
+      "type": "string"
+    },
+    "answer_en": {
+      "type": "string"
+    },
+    "answer_ar": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "sort_order": {
+      "type": "number"
+    },
+    "is_active": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "question_en",
+    "answer_en"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    }
+  }
+}

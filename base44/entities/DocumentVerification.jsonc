@@ -1,0 +1,23 @@
+{
+  "name": "DocumentVerification",
+  "type": "object",
+  "properties": {
+    "code": { "type": "string" },
+    "doc_type": { "type": "string" },
+    "record_id": { "type": "string" },
+    "reference": { "type": "string" },
+    "title": { "type": "string" },
+    "company_name": { "type": "string" },
+    "company_name_ar": { "type": "string" },
+    "summary": { "type": "string" },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "last_generated": { "type": "string", "format": "date-time" }
+  },
+  "required": ["code", "doc_type"],
+  "rls": {
+    "read": { "$or": [{ "user_condition": { "role": "system_admin" } }, { "user_condition": { "role": "contributions_manager" } }] },
+    "create": { "user_condition": { "role": "system_admin" } },
+    "update": { "user_condition": { "role": "system_admin" } },
+    "delete": { "user_condition": { "role": "system_admin" } }
+  }
+}

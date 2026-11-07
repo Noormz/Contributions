@@ -1,0 +1,186 @@
+{
+  "name": "ContributionApplication",
+  "type": "object",
+  "properties": {
+    "application_reference": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "company_name": {
+      "type": "string"
+    },
+    "financial_year": {
+      "type": "string"
+    },
+    "profile_confirmed": {
+      "type": "boolean",
+      "default": false
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "cheque",
+        "bank_transfer",
+        "bank_deposit",
+        "payment_gateway"
+      ]
+    },
+    "additional_comments": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "submitted",
+        "assigned",
+        "under_review",
+        "calculation_review",
+        "pending_manager_approval",
+        "approved",
+        "accounts_processing",
+        "completed",
+        "returned"
+      ],
+      "default": "draft"
+    },
+    "submitted_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "assigned_officer_id": {
+      "type": "string"
+    },
+    "assigned_officer_name": {
+      "type": "string"
+    },
+    "lock_info": {
+      "type": "string"
+    },
+    "current_step": {
+      "type": "number",
+      "default": 1
+    },
+    "payment_methods": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "partial_calculation": {
+      "type": "boolean"
+    },
+    "partial_calculation_notes": {
+      "type": "string"
+    },
+    "declared_amount": {
+      "type": "number"
+    },
+    "acknowledgements": {
+      "type": "object"
+    },
+    "contribution_due": {
+      "type": "number"
+    },
+    "assigned_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_reminder_date": {
+      "type": "string"
+    },
+    "reopened_from": {
+      "type": "string"
+    },
+    "profile_changes": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "company_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.company_id": "{{user.data.company_id}}"
+        },
+        {
+          "data.assigned_officer_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.company_id": "{{user.data.company_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        }
+      ]
+    }
+  }
+}

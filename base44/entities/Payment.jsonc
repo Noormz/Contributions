@@ -1,0 +1,146 @@
+{
+  "name": "Payment",
+  "type": "object",
+  "properties": {
+    "payment_reference": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "company_name": {
+      "type": "string"
+    },
+    "application_id": {
+      "type": "string"
+    },
+    "contribution_reference": {
+      "type": "string"
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "cheque",
+        "bank_transfer",
+        "bank_deposit",
+        "payment_gateway"
+      ]
+    },
+    "payment_amount": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string",
+      "default": "KWD"
+    },
+    "payment_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "cheque_number": {
+      "type": "string"
+    },
+    "bank_name": {
+      "type": "string"
+    },
+    "transfer_reference": {
+      "type": "string"
+    },
+    "deposit_reference": {
+      "type": "string"
+    },
+    "transaction_reference": {
+      "type": "string"
+    },
+    "payment_evidence_attachment": {
+      "type": "string"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "verified",
+        "rejected",
+        "reversed"
+      ],
+      "default": "pending"
+    },
+    "internal_notes": {
+      "type": "string"
+    },
+    "verified_by": {
+      "type": "string"
+    },
+    "verified_date": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "company_id",
+    "payment_amount",
+    "payment_method"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.company_id": "{{user.data.company_id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "name": "FinancialStatement",
+  "type": "object",
+  "properties": {
+    "company_id": {
+      "type": "string"
+    },
+    "application_id": {
+      "type": "string"
+    },
+    "financial_year": {
+      "type": "string"
+    },
+    "statement_start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "statement_end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "document_name": {
+      "type": "string"
+    },
+    "document_type": {
+      "type": "string"
+    },
+    "file_url": {
+      "type": "string"
+    },
+    "upload_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "review_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "under_review",
+        "accepted",
+        "rejected"
+      ],
+      "default": "pending"
+    }
+  },
+  "required": [
+    "company_id",
+    "financial_year"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.company_id": "{{user.data.company_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        }
+      ]
+    }
+  }
+}

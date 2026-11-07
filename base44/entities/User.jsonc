@@ -1,0 +1,51 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "company_representative",
+        "contributions_officer",
+        "contributions_manager",
+        "accounts_unit",
+        "system_admin"
+      ],
+      "default": "company_representative"
+    },
+    "full_name_ar": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "job_title": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "language_preference": {
+      "type": "string",
+      "enum": [
+        "en",
+        "ar"
+      ],
+      "default": "en"
+    },
+    "last_login_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "username": {
+      "type": "string"
+    },
+    "email_verified": {
+      "type": "boolean"
+    }
+  }
+}

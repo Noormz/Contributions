@@ -1,0 +1,111 @@
+{
+  "name": "ApprovalHistory",
+  "type": "object",
+  "properties": {
+    "application_id": {
+      "type": "string"
+    },
+    "calculation_id": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "start_review",
+        "save_review",
+        "add_comment",
+        "request_clarification",
+        "return_application",
+        "submit_calculation",
+        "approve",
+        "return_for_correction",
+        "request_info",
+        "reassign",
+        "escalate"
+      ]
+    },
+    "previous_status": {
+      "type": "string"
+    },
+    "new_status": {
+      "type": "string"
+    },
+    "action_by": {
+      "type": "string"
+    },
+    "action_by_name": {
+      "type": "string"
+    },
+    "action_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "comments": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "application_id",
+    "action"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    }
+  }
+}

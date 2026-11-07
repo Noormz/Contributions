@@ -1,0 +1,157 @@
+{
+  "name": "ContributionCalculation",
+  "type": "object",
+  "properties": {
+    "calculation_reference": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "application_id": {
+      "type": "string"
+    },
+    "financial_year": {
+      "type": "string"
+    },
+    "financial_inputs": {
+      "type": "string"
+    },
+    "adjustments": {
+      "type": "number",
+      "default": 0
+    },
+    "calculation_basis": {
+      "type": "string"
+    },
+    "calculated_contribution": {
+      "type": "number"
+    },
+    "previous_contribution": {
+      "type": "number",
+      "default": 0
+    },
+    "outstanding_balance": {
+      "type": "number",
+      "default": 0
+    },
+    "officer_comments": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "in_review",
+        "pending_approval",
+        "approved",
+        "returned"
+      ],
+      "default": "draft"
+    },
+    "reviewed_by": {
+      "type": "string"
+    },
+    "approved_by": {
+      "type": "string"
+    },
+    "approval_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "version": {
+      "type": "number"
+    },
+    "reopened": {
+      "type": "boolean"
+    },
+    "reopen_reason": {
+      "type": "string"
+    },
+    "is_partial": {
+      "type": "boolean"
+    },
+    "manager_comments": {
+      "type": "string"
+    },
+    "approved_by_id": {
+      "type": "string"
+    },
+    "reviewed_by_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "company_id",
+    "application_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    }
+  }
+}

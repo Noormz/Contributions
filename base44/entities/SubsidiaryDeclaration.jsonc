@@ -1,0 +1,103 @@
+{
+  "name": "SubsidiaryDeclaration",
+  "type": "object",
+  "properties": {
+    "application_id": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "subsidiary_name": {
+      "type": "string"
+    },
+    "ownership_percentage": {
+      "type": "number"
+    },
+    "financial_year": {
+      "type": "string"
+    },
+    "financial_statement_end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "income_statement_page": {
+      "type": "string"
+    },
+    "supporting_document": {
+      "type": "string"
+    },
+    "statement_incomplete": {
+      "type": "boolean"
+    },
+    "statement_incomplete_reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "application_id",
+    "subsidiary_name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "data.company_id": "{{user.data.company_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        }
+      ]
+    }
+  }
+}

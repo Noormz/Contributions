@@ -1,0 +1,93 @@
+{
+  "name": "OfficerAssignment",
+  "type": "object",
+  "properties": {
+    "application_id": {
+      "type": "string"
+    },
+    "application_reference": {
+      "type": "string"
+    },
+    "previous_officer_id": {
+      "type": "string"
+    },
+    "previous_officer_name": {
+      "type": "string"
+    },
+    "new_officer_id": {
+      "type": "string"
+    },
+    "new_officer_name": {
+      "type": "string"
+    },
+    "assigned_by": {
+      "type": "string"
+    },
+    "assignment_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "assignment_reason": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "application_id",
+    "new_officer_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.new_officer_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "name": "CompanyRelationship",
+  "type": "object",
+  "properties": {
+    "parent_company_id": {
+      "type": "string"
+    },
+    "parent_company_name": {
+      "type": "string"
+    },
+    "subsidiary_company_id": {
+      "type": "string"
+    },
+    "subsidiary_company_name": {
+      "type": "string"
+    },
+    "company_id": {
+      "type": "string"
+    },
+    "ownership_percentage": {
+      "type": "number"
+    },
+    "relationship_start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "relationship_end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "financial_year": {
+      "type": "string"
+    },
+    "financial_statement_end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "income_statement_page_reference": {
+      "type": "string"
+    },
+    "supporting_attachment": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "parent_company_id",
+    "subsidiary_company_id",
+    "ownership_percentage"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.company_id": "{{user.data.company_id}}"
+        },
+        {
+          "data.parent_company_id": "{{user.data.company_id}}"
+        },
+        {
+          "data.subsidiary_company_id": "{{user.data.company_id}}"
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "name": "CalculationVersion",
+  "type": "object",
+  "properties": {
+    "calculation_id": {
+      "type": "string"
+    },
+    "application_id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "number"
+    },
+    "snapshot": {
+      "type": "string"
+    },
+    "changed_by": {
+      "type": "string"
+    },
+    "reason": {
+      "type": "string"
+    }
+  },
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_officer"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "contributions_manager"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "accounts_unit"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "system_admin"
+      }
+    }
+  }
+}
