@@ -8,6 +8,7 @@ import LookupsPanel, { RestrictedNotice } from '@/components/admin/LookupsPanel'
 import SettingsPanel from '@/components/admin/SettingsPanel';
 import UsersPanel from '@/components/admin/UsersPanel';
 import CrudPanel from '@/components/admin/CrudPanel';
+import DynamicsPanel from '@/components/admin/DynamicsPanel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Loader2, BellRing, AlertTriangle } from 'lucide-react';
@@ -97,6 +98,7 @@ export default function Administration() {
             <TabsTrigger value="templates" data-testid="tab-templates">{tr('Email Templates', 'قوالب البريد')}</TabsTrigger>
             <TabsTrigger value="faq" data-testid="tab-faq">{tr('FAQ', 'الأسئلة الشائعة')}</TabsTrigger>
             <TabsTrigger value="reminders" data-testid="tab-reminders">{tr('Reminders', 'التذكيرات')}</TabsTrigger>
+            <TabsTrigger value="dynamics" data-testid="tab-dynamics">{tr('Dynamics 365', 'Dynamics 365')}</TabsTrigger>
           </TabsList>
           <TabsContent value="users" className="mt-4"><UsersPanel /></TabsContent>
           <TabsContent value="lookups" className="mt-4"><LookupsPanel /></TabsContent>
@@ -111,6 +113,7 @@ export default function Administration() {
             <CrudPanel entity="FaqEntry" sort="sort_order" fields={faqFields} defaults={{ is_active: true, sort_order: 0 }} testId="faq" addLabel={tr('Add FAQ entry', 'إضافة سؤال')} />
           </TabsContent>
           <TabsContent value="reminders" className="mt-4"><RemindersPanel /></TabsContent>
+          <TabsContent value="dynamics" className="mt-4"><DynamicsPanel /></TabsContent>
         </Tabs>
       ) : (
         <RestrictedNotice />

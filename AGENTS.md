@@ -13,6 +13,12 @@ The backend is the local Express + SQLite API in `server/`. Start with `README.m
 - `src/api/base44Client.js` — frontend client; same call shape as the old Base44 SDK (`base44.entities.X.filter`, `base44.functions.invoke`, …).
 - `src/lib/tr.js` — `useTr()` bilingual strings (`tr('English', 'العربية')`) and formatting helpers.
 
+## Dynamics 365 back end
+- Dynamics (Dataverse, solution **Contribution**, prefix `new_`) is the system of record; see `docs/DYNAMICS.md`.
+- `server/dataverse/schema.js` maps `base44/entities/*.jsonc` to tables. After adding a field, run `npm run dataverse:provision`.
+- All writes must go through `insertDoc` / `updateDoc` / `deleteDoc` / `insertFile` in `server/db.js` (never raw SQL on `docs`/`files`), so they are queued for Dynamics.
+- KFAS staff work in the Dynamics apps; workflow steps they request (Action Requests) run through `server/dataverse/actions.js` → the same functions in `server/functions.js`.
+
 ## Working Notes
 
 - `npm run seed` resets `data/` and loads demo data; `npm run dev` runs API (:3001) and web (:5173).

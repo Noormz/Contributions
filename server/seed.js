@@ -10,8 +10,9 @@ const dbFile = process.env.DB_FILE || path.join(DATA_DIR, 'portal.db');
 for (const f of [dbFile, `${dbFile}-wal`, `${dbFile}-shm`]) if (fs.existsSync(f)) fs.rmSync(f);
 fs.rmSync(path.join(DATA_DIR, 'uploads'), { recursive: true, force: true });
 
-const { db, insertDoc, updateDoc, getDoc, now } = await import('./db.js');
+const { db, insertDoc, updateDoc, getDoc, now, insertFile } = await import('./db.js');
 const { createUser } = await import('./auth.js');
+await import('./dataverse/index.js'); // queue seed data for Dynamics when DATAVERSE_URL is set
 const { functions } = await import('./functions.js');
 
 // Development accounts (local test data only). Password for all seeded users:
@@ -51,8 +52,7 @@ async function file(user, name, title, companyId, lines) {
   const p = path.join(UPLOAD_DIR, id);
   const buf = await companyPdf(title, companyId, lines);
   fs.writeFileSync(p, buf);
-  db.prepare('INSERT INTO files (id, filename, mime, size, path, uploaded_by, company_id, created) VALUES (?,?,?,?,?,?,?,?)')
-    .run(id, name, 'application/pdf', buf.length, p, user.id, companyId || '', now());
+  insertFile({ id, filename: name, mime: 'application/pdf', size: buf.length, path: p, uploaded_by: user.id, company_id: companyId || '', created: now() });
   return `/api/files/${id}`;
 }
 

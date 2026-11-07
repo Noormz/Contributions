@@ -57,6 +57,12 @@ transaction reference and status. The provider name is configurable in Administr
 Settings (`payment_gateway_provider`); a real provider integration plugs into
 `startGatewayPayment` / `completeGatewayPayment` in `server/functions.js`.
 
+## Dynamics 365
+
+KFAS staff use four Dynamics model-driven apps (Officer, Manager, Accounts, Admin); companies use this portal.
+The server syncs every record to Dataverse and runs staff actions requested from Dynamics.
+Setup and details: [docs/DYNAMICS.md](docs/DYNAMICS.md).
+
 ## Tests
 
 ```bash

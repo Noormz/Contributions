@@ -1,6 +1,6 @@
 // Communication helpers: one-call thread view with access check (company reps
 // can see attachments on their own company's threads).
-import { getDoc, allDocs, db } from '../db.js';
+import { getDoc, allDocs, updateDoc, transaction } from '../db.js';
 import { isInternal } from '../rls.js';
 import { HttpError } from '../functions.js';
 
@@ -8,9 +8,7 @@ export const functions = {
   // Marks all (or the given) notifications of the current user as read in one call.
   async markNotificationsRead(user, { ids } = {}) {
     const mine = allDocs('Notification').filter((n) => n.user_id === user.id && !n.is_read && (!ids || ids.includes(n.id)));
-    const stmt = db.prepare("UPDATE docs SET data = json_set(data, '$.is_read', json('true')) WHERE id = ? AND entity = 'Notification'");
-    db.exec('BEGIN');
-    try { mine.forEach((n) => stmt.run(n.id)); db.exec('COMMIT'); } catch (e) { db.exec('ROLLBACK'); throw e; }
+    transaction(() => mine.forEach((n) => updateDoc('Notification', n.id, { is_read: true })));
     return { updated: mine.length };
   },
 

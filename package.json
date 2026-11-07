@@ -13,7 +13,12 @@
     "lint": "eslint . --quiet",
     "test:e2e": "node scripts/e2e.mjs",
     "preview": "vite preview",
-    "test:api": "node --test --test-concurrency=1 tests/api/workflows.test.mjs tests/api/ai.test.mjs"
+    "test:api": "node --test --test-concurrency=1 tests/api/workflows.test.mjs tests/api/ai.test.mjs tests/api/dataverse.test.mjs",
+    "dataverse:check": "node scripts/dataverse/cli.mjs check",
+    "dataverse:provision": "node scripts/dataverse/cli.mjs provision",
+    "dataverse:push-all": "node scripts/dataverse/cli.mjs push-all",
+    "dataverse:import": "node scripts/dataverse/cli.mjs import",
+    "dataverse:browser-script": "node scripts/dataverse/browser-bundle.mjs"
   },
   "dependencies": {
     "@fontsource/great-vibes": "5.2.8",

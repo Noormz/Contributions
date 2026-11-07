@@ -4,8 +4,11 @@ import multer from 'multer';
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { db, DATA_DIR, allDocs, getDoc, insertDoc, updateDoc, deleteDoc, matches, sortDocs, nextSequence, now } from './db.js';
+import { db, DATA_DIR, allDocs, getDoc, insertDoc, updateDoc, deleteDoc, matches, sortDocs, nextSequence, now, insertFile } from './db.js';
 import { can, knownEntity, isInternal, isAdmin } from './rls.js';
+import { startDataverse, dataverseStatus } from './dataverse/index.js';
+import { enqueueAll, fetchFileContent } from './dataverse/sync.js';
+import { enabled as dataverseEnabled } from './dataverse/client.js';
 import {
   userFromToken, createSession, destroySession, findUserByLogin, verifyPassword, createUser, issueOtp,
   markVerified, findCredentialByEmail, issueResetToken, consumeResetToken, setPassword, passwordProblem,
@@ -309,8 +312,7 @@ app.post('/api/files', requireAuth, upload.single('file'), wrap(async (req) => {
   if (!ALLOWED_EXT.test(f.originalname)) { fs.unlinkSync(f.path); bad(400, 'This file type is not allowed. Upload PDF, image, Office, CSV, TXT or ZIP files.'); }
   const id = crypto.randomBytes(12).toString('hex');
   const companyId = req.user.role === 'company_representative' ? req.user.company_id : (req.body.company_id || '');
-  db.prepare('INSERT INTO files (id, filename, mime, size, path, uploaded_by, company_id, created) VALUES (?,?,?,?,?,?,?,?)')
-    .run(id, f.originalname, f.mimetype, f.size, f.path, req.user.id, companyId || '', now());
+  insertFile({ id, filename: f.originalname, mime: f.mimetype, size: f.size, path: f.path, uploaded_by: req.user.id, company_id: companyId || '', created: now() });
   const url = `/api/files/${id}`;
   return { file_uri: url, file_url: url, id, filename: f.originalname, size: f.size, mime: f.mimetype };
 }));
@@ -321,11 +323,18 @@ app.get('/api/files/:id/meta', requireAuth, wrap(async (req) => {
   return f;
 }));
 
-app.get('/api/files/:id', requireAuth, (req, res) => {
+app.get('/api/files/:id', requireAuth, async (req, res) => {
   const f = db.prepare('SELECT * FROM files WHERE id = ?').get(req.params.id);
   if (!f) return res.status(404).json({ message: 'File not found' });
   const allowed = isInternal(req.user) || f.uploaded_by === req.user.id || (f.company_id && f.company_id === req.user.company_id);
   if (!allowed) return res.status(403).json({ message: 'You do not have permission to access this file.' });
+  // After rebuilding the portal from Dynamics only file metadata is local: fetch the bytes once.
+  if ((!f.path || !fs.existsSync(f.path)) && dataverseEnabled()) {
+    const dest = path.join(DATA_DIR, 'uploads', f.id);
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    if (await fetchFileContent(f.id, dest).catch(() => false)) f.path = dest;
+  }
+  if (!f.path || !fs.existsSync(f.path)) return res.status(404).json({ message: 'File content not available' });
   res.setHeader('Content-Type', f.mime || 'application/octet-stream');
   res.setHeader('Content-Disposition', `${req.query.download ? 'attachment' : 'inline'}; filename="${encodeURIComponent(f.filename)}"`);
   fs.createReadStream(f.path).pipe(res);
@@ -475,6 +484,16 @@ app.get('/api/public/lookups', (req, res) => {
 
 app.get('/api/health', (_req, res) => res.json({ ok: true }));
 
+// ---------- Dynamics (Dataverse) connection ----------
+app.get('/api/admin/dataverse', requireAuth, (req, res) => {
+  if (!isAdmin(req.user)) return res.status(403).json({ message: 'Only system administrators can view the Dynamics connection.' });
+  res.json(dataverseStatus());
+});
+app.post('/api/admin/dataverse/push-all', requireAuth, (req, res) => {
+  if (!isAdmin(req.user)) return res.status(403).json({ message: 'Only system administrators can do this.' });
+  res.json({ queued: enqueueAll() });
+});
+
 // ---------- production static ----------
 const dist = path.resolve(process.cwd(), 'dist');
 if (fs.existsSync(dist)) {
@@ -488,6 +507,7 @@ const PORT = Number(process.env.PORT || 3001);
 if (process.env.NODE_ENV !== 'test-no-listen') {
   app.listen(PORT, () => console.log(`[api] listening on http://localhost:${PORT} · assistant provider: ${AI_LLM.provider}${AI_LLM.model ? ` (${AI_LLM.model})` : ''}`));
   setInterval(() => runReminders().catch((e) => console.error('[reminders]', e)), 60 * 60 * 1000);
+  startDataverse();
 }
 
 export default app;

@@ -40,6 +40,19 @@ db.exec(`
 `);
 
 export const newId = () => crypto.randomBytes(12).toString('hex');
+
+// ---------- change hooks (used by the Dynamics/Dataverse sync) ----------
+// Listeners run synchronously inside the write so a durable outbox row is
+// committed together with the change. `origin` is 'dataverse' when the write
+// came from Dynamics itself (so it is not echoed back).
+const listeners = [];
+let origin = 'portal';
+export function onChange(fn) { listeners.push(fn); }
+export function withOrigin(o, fn) {
+  const prev = origin; origin = o;
+  try { return fn(); } finally { origin = prev; }
+}
+const emit = (evt) => { if (origin === 'portal') listeners.forEach((fn) => fn(evt)); };
 export const now = () => new Date().toISOString();
 
 const toRecord = (row) => (row ? {
@@ -71,6 +84,7 @@ export function insertDoc(entity, data, user, opts = {}) {
   const ts = opts.created_date || now();
   db.prepare('INSERT INTO docs (id, entity, data, created_date, updated_date, created_by_id, created_by) VALUES (?,?,?,?,?,?,?)')
     .run(id, entity, JSON.stringify(strip(data)), ts, ts, user?.id || null, user?.email || null);
+  emit({ op: 'upsert', entity, id });
   return getDoc(entity, id);
 }
 
@@ -80,11 +94,30 @@ export function updateDoc(entity, id, patch) {
   const merged = { ...strip(existing), ...strip(patch) };
   db.prepare('UPDATE docs SET data = ?, updated_date = ? WHERE id = ? AND entity = ?')
     .run(JSON.stringify(merged), now(), id, entity);
+  emit({ op: 'upsert', entity, id });
   return getDoc(entity, id);
 }
 
 export function deleteDoc(entity, id) {
   db.prepare('DELETE FROM docs WHERE entity = ? AND id = ?').run(entity, id);
+  emit({ op: 'delete', entity, id });
+}
+
+// Raw upsert used when importing records from Dynamics (keeps id and timestamps).
+export function putDoc(entity, rec) {
+  const { id, created_date, updated_date, created_by_id, created_by } = rec;
+  const ts = now();
+  db.prepare(`INSERT INTO docs (id, entity, data, created_date, updated_date, created_by_id, created_by) VALUES (?,?,?,?,?,?,?)
+    ON CONFLICT(id) DO UPDATE SET data = excluded.data, updated_date = excluded.updated_date`)
+    .run(id, entity, JSON.stringify(strip(rec)), created_date || ts, updated_date || ts, created_by_id || null, created_by || null);
+  return getDoc(entity, id);
+}
+
+// Uploaded file metadata (the bytes stay on disk and are copied to Dynamics by the sync).
+export function insertFile(f) {
+  db.prepare('INSERT INTO files (id, filename, mime, size, path, uploaded_by, company_id, created) VALUES (?,?,?,?,?,?,?,?)')
+    .run(f.id, f.filename, f.mime, f.size, f.path, f.uploaded_by || null, f.company_id || null, f.created || now());
+  emit({ op: 'upsert', entity: 'PortalFile', id: f.id });
 }
 
 // Collision-safe sequence: PREFIX-YYYY-000001
@@ -96,6 +129,7 @@ export function nextSequence(prefix, year = new Date().getFullYear()) {
     const value = (row?.value || 0) + 1;
     db.prepare('INSERT INTO counters (name, value) VALUES (?, ?) ON CONFLICT(name) DO UPDATE SET value = excluded.value').run(name, value);
     db.exec('COMMIT');
+    emit({ op: 'upsert', entity: 'Counter', id: name });
     return `${prefix}-${year}-${String(value).padStart(6, '0')}`;
   } catch (e) {
     db.exec('ROLLBACK');
