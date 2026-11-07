@@ -61,7 +61,7 @@ Settings (`payment_gateway_provider`); a real provider integration plugs into
 
 KFAS staff use four Dynamics model-driven apps (Officer, Manager, Accounts, Admin); companies use this portal.
 The server syncs every record to Dataverse and runs staff actions requested from Dynamics.
-Setup and details: [docs/DYNAMICS.md](docs/DYNAMICS.md).
+Setup and details: [docs/DYNAMICS.md](docs/DYNAMICS.md). Publishing checklist: [docs/HANDOVER.md](docs/HANDOVER.md).
 
 ## Tests
 
