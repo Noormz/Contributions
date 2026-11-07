@@ -51,8 +51,8 @@ Dynamics is the system of record for the Contributions E-Portal. Everything live
 
 ## One-time setup
 
-1. **Client secret** — Entra ID › App registrations › *your app* (client id
-   `e716025e-7447-479a-92d6-6e361e9fa87d`) › Certificates & secrets › New client secret. Copy the value.
+1. **Server app + secret** — Entra ID › App registrations › New registration `KFAS Portal Server`;
+   copy its client id, then Certificates & secrets › New client secret. Copy the value.
 2. **Application user** — Power Platform admin center › Environments › amek-contributes › Settings ›
    Users + permissions › Application users › New app user › pick the app › Business unit (root) ›
    security role **KFAS Portal Integration** (created by the build script; *System Administrator* also works).
@@ -60,7 +60,7 @@ Dynamics is the system of record for the Contributions E-Portal. Everything live
    ```
    DATAVERSE_URL=https://amek-contributes.crm4.dynamics.com
    DATAVERSE_TENANT_ID=8d1bfd63-d0f4-4015-8577-30dda9a4b743
-   DATAVERSE_CLIENT_ID=e716025e-7447-479a-92d6-6e361e9fa87d
+   DATAVERSE_CLIENT_ID=<client id of KFAS Portal Server>
    DATAVERSE_CLIENT_SECRET=<the secret>
    ```
 4. `npm run dataverse:check` — signs in and confirms all 34 tables exist.

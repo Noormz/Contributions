@@ -12,11 +12,13 @@ Details of the Dynamics design: [DYNAMICS.md](DYNAMICS.md).
 
 ## Owner (KFAS side) — before publishing
 
-1. **Client secret** — portal.azure.com › Microsoft Entra ID › App registrations ›
-   app `e716025e-7447-479a-92d6-6e361e9fa87d` › Certificates & secrets › New client secret (24 months).
-   Copy the *Value* and give it to the publisher privately (not by email/chat in plain text if possible).
+1. **Server app + client secret** — portal.azure.com › Microsoft Entra ID › App registrations ›
+   New registration › name `KFAS Portal Server` › Register. Copy the *Application (client) ID*.
+   Then Certificates & secrets › New client secret (24 months) › copy the *Value*.
+   Give both to the publisher (the secret privately — not by email/chat in plain text if possible).
+   (Use a dedicated app for the server; don't reuse the app used for the Dynamics MCP connector.)
 2. **Application user** — admin.powerplatform.microsoft.com › Environments › amek-contributes › Settings ›
-   Users + permissions › Application users › New app user › that app › root business unit ›
+   Users + permissions › Application users › New app user › `KFAS Portal Server` › root business unit ›
    role **KFAS Portal Integration**.
 3. **Staff** — Settings › Users › each KFAS employee › Manage security roles › **Basic User** + one of
    *KFAS Contributions Officer / KFAS Contributions Manager / KFAS Accounts Unit / KFAS System Admin*.
@@ -39,7 +41,7 @@ Requirements: Node.js 22+ (uses built-in `node:sqlite`), HTTPS, a persistent dis
    ```
    DATAVERSE_URL=https://amek-contributes.crm4.dynamics.com
    DATAVERSE_TENANT_ID=8d1bfd63-d0f4-4015-8577-30dda9a4b743
-   DATAVERSE_CLIENT_ID=e716025e-7447-479a-92d6-6e361e9fa87d
+   DATAVERSE_CLIENT_ID=<client id of KFAS Portal Server>
    DATAVERSE_CLIENT_SECRET=<secret value>
    ```
    Keep the existing settings (APP_URL, SMTP_*, AI keys…). Never commit `.env`.
