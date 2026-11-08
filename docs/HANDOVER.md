@@ -26,7 +26,29 @@ Details of the Dynamics design: [DYNAMICS.md](DYNAMICS.md).
 4. Optional but recommended: in the portal Admin › Settings enter `kfas_bank_name`,
    `kfas_account_number`, `kfas_iban` (companies paying by transfer see these).
 
-## Publisher — deployment
+## If the portal is hosted on amekdemos (`/kfas`)
+
+KFAS is already deployed at `https://amekdemos-hhf2a2bxfjemhybt.westus3-01.azurewebsites.net/kfas/`
+from its own repo (`<owner>/kfas-amekdemos`); every push to its `main` deploys. This is an **update**,
+not a new app — no path mapping, landing-page card or site-wide change is needed.
+
+1. Merge this branch's changes into `kfas-amekdemos` `main`, **keeping** that repo's
+   `.github/workflows/deploy-amekdemos.yml` and any sub-path (`/kfas`) / `DATA_DIR` adjustments.
+2. Secrets as repo secrets (hidden prompt; the workflow writes `APP_*` into the app's `web.config`):
+   ```
+   gh secret set APP_DATAVERSE_URL           --repo <owner>/kfas-amekdemos   # https://amek-contributes.crm4.dynamics.com
+   gh secret set APP_DATAVERSE_TENANT_ID     --repo <owner>/kfas-amekdemos   # 8d1bfd63-d0f4-4015-8577-30dda9a4b743
+   gh secret set APP_DATAVERSE_CLIENT_ID     --repo <owner>/kfas-amekdemos   # KFAS Portal Server client id
+   gh secret set APP_DATAVERSE_CLIENT_SECRET --repo <owner>/kfas-amekdemos
+   ```
+3. Push to `main` and watch the run (`gh run watch --repo <owner>/kfas-amekdemos --exit-status`).
+4. First load into Dynamics: sign in to the portal as system admin › Administration › **Dynamics 365** ›
+   *Send all records to Dynamics*; wait until *Changes waiting* is 0.
+5. Notes for this host: the database stays in `D:\home\data\kfas\` (deploys don't touch it); when
+   `/kfas` is switched off the sync pauses and queued changes are sent when it is switched on again;
+   the sync's background checks are light (a few seconds apart, no extra processes).
+
+## Publisher — deployment on any other server
 
 Requirements: Node.js 22+ (uses built-in `node:sqlite`), HTTPS, a persistent disk for `data/`.
 
